@@ -38,6 +38,9 @@ from github.RepositoryRulesetBypassActor import RepositoryRulesetBypassActor
 from github.Rule import Rule
 
 if TYPE_CHECKING:
+    from github.RepositoryRulesetBypassActor import RepositoryRulesetBypassActor
+    from github.Rule import Rule
+
     pass
 
 
