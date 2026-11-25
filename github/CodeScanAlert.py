@@ -35,6 +35,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
 import github.CodeScanAlertInstance
+import github.CodeScanningAlertLinkedIssue
 import github.CodeScanRule
 import github.CodeScanTool
 import github.GithubObject
@@ -46,6 +47,7 @@ from github.PaginatedList import PaginatedList
 
 if TYPE_CHECKING:
     from github.CodeScanAlertInstance import CodeScanAlertInstance
+    from github.CodeScanningAlertLinkedIssue import CodeScanningAlertLinkedIssue
     from github.CodeScanRule import CodeScanRule
     from github.CodeScanTool import CodeScanTool
     from github.NamedUser import NamedUser
@@ -78,6 +80,7 @@ class CodeScanAlert(NonCompletableGithubObject):
         self._fixed_at: Attribute[datetime | None] = NotSet
         self._html_url: Attribute[str] = NotSet
         self._instances_url: Attribute[str] = NotSet
+        self._linked_issues: Attribute[list[CodeScanningAlertLinkedIssue]] = NotSet
         self._linked_pull_requests: Attribute[list[PullRequest]] = NotSet
         self._most_recent_instance: Attribute[CodeScanAlertInstance] = NotSet
         self._number: Attribute[int] = NotSet
@@ -129,6 +132,10 @@ class CodeScanAlert(NonCompletableGithubObject):
     @property
     def instances_url(self) -> str:
         return self._instances_url.value
+
+    @property
+    def linked_issues(self) -> list[CodeScanningAlertLinkedIssue]:
+        return self._linked_issues.value
 
     @property
     def linked_pull_requests(self) -> list[PullRequest]:
@@ -200,6 +207,10 @@ class CodeScanAlert(NonCompletableGithubObject):
             self._html_url = self._makeStringAttribute(attributes["html_url"])
         if "instances_url" in attributes:  # pragma no branch
             self._instances_url = self._makeStringAttribute(attributes["instances_url"])
+        if "linked_issues" in attributes:  # pragma no branch
+            self._linked_issues = self._makeListOfClassesAttribute(
+                github.CodeScanningAlertLinkedIssue.CodeScanningAlertLinkedIssue, attributes["linked_issues"]
+            )
         if "linked_pull_requests" in attributes:  # pragma no branch
             self._linked_pull_requests = self._makeListOfClassesAttribute(
                 github.PullRequest.PullRequest, attributes["linked_pull_requests"]
