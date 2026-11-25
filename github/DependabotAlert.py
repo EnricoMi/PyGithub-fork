@@ -31,6 +31,8 @@ from typing import TYPE_CHECKING, Any
 import github.AdvisoryVulnerabilityPackage
 import github.DependabotAlertAdvisory
 import github.DependabotAlertDependency
+import github.DependabotAlertDismissalRequestSimple
+import github.DependabotAlertReachability
 import github.DependabotAlertVulnerability
 import github.NamedUser
 import github.Organization
@@ -39,6 +41,8 @@ from github.GithubObject import Attribute, NonCompletableGithubObject, NotSet
 if TYPE_CHECKING:
     from github.DependabotAlertAdvisory import DependabotAlertAdvisory
     from github.DependabotAlertDependency import DependabotAlertDependency
+    from github.DependabotAlertDismissalRequestSimple import DependabotAlertDismissalRequestSimple
+    from github.DependabotAlertReachability import DependabotAlertReachability
     from github.DependabotAlertVulnerability import DependabotAlertVulnerability
     from github.NamedUser import NamedUser
     from github.Organization import Organization
@@ -62,6 +66,7 @@ class DependabotAlert(NonCompletableGithubObject):
         self._auto_dismissed_at: Attribute[datetime] = NotSet
         self._created_at: Attribute[datetime] = NotSet
         self._dependency: Attribute[DependabotAlertDependency] = NotSet
+        self._dismissal_request: Attribute[DependabotAlertDismissalRequestSimple] = NotSet
         self._dismissed_at: Attribute[datetime | None] = NotSet
         self._dismissed_by: Attribute[NamedUser | Organization | None] = NotSet
         self._dismissed_comment: Attribute[str | None] = NotSet
@@ -69,6 +74,7 @@ class DependabotAlert(NonCompletableGithubObject):
         self._fixed_at: Attribute[str] = NotSet
         self._html_url: Attribute[str] = NotSet
         self._number: Attribute[int] = NotSet
+        self._reachability: Attribute[DependabotAlertReachability] = NotSet
         self._security_advisory: Attribute[DependabotAlertAdvisory] = NotSet
         self._security_vulnerability: Attribute[DependabotAlertVulnerability] = NotSet
         self._state: Attribute[str] = NotSet
@@ -93,6 +99,10 @@ class DependabotAlert(NonCompletableGithubObject):
     @property
     def dependency(self) -> DependabotAlertDependency:
         return self._dependency.value
+
+    @property
+    def dismissal_request(self) -> DependabotAlertDismissalRequestSimple:
+        return self._dismissal_request.value
 
     @property
     def dismissed_at(self) -> datetime | None:
@@ -121,6 +131,10 @@ class DependabotAlert(NonCompletableGithubObject):
     @property
     def number(self) -> int:
         return self._number.value
+
+    @property
+    def reachability(self) -> DependabotAlertReachability:
+        return self._reachability.value
 
     @property
     def security_advisory(self) -> DependabotAlertAdvisory:
@@ -153,6 +167,11 @@ class DependabotAlert(NonCompletableGithubObject):
             self._dependency = self._makeClassAttribute(
                 github.DependabotAlertDependency.DependabotAlertDependency, attributes["dependency"]
             )
+        if "dismissal_request" in attributes:  # pragma no branch
+            self._dismissal_request = self._makeClassAttribute(
+                github.DependabotAlertDismissalRequestSimple.DependabotAlertDismissalRequestSimple,
+                attributes["dismissal_request"],
+            )
         if "dismissed_at" in attributes:
             self._dismissed_at = self._makeDatetimeAttribute(attributes["dismissed_at"])
         if "dismissed_by" in attributes:
@@ -173,6 +192,10 @@ class DependabotAlert(NonCompletableGithubObject):
             self._html_url = self._makeStringAttribute(attributes["html_url"])
         if "number" in attributes:
             self._number = self._makeIntAttribute(attributes["number"])
+        if "reachability" in attributes:  # pragma no branch
+            self._reachability = self._makeClassAttribute(
+                github.DependabotAlertReachability.DependabotAlertReachability, attributes["reachability"]
+            )
         if "security_advisory" in attributes:
             self._security_advisory = self._makeClassAttribute(
                 github.DependabotAlertAdvisory.DependabotAlertAdvisory, attributes["security_advisory"]
