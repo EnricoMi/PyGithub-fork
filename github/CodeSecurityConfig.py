@@ -26,6 +26,8 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
+import github.CodeSecurityConfigurationCodeScanningDefaultSetupOptions
+import github.CodeSecurityConfigurationCodeScanningOptions
 from github.GithubObject import Attribute, NonCompletableGithubObject, NotSet
 
 
@@ -45,7 +47,11 @@ class CodeSecurityConfig(NonCompletableGithubObject):
     def _initAttributes(self) -> None:
         self._advanced_security: Attribute[str] = NotSet
         self._code_scanning_default_setup: Attribute[str] = NotSet
+        self._code_scanning_default_setup_options: Attribute[
+            CodeSecurityConfigurationCodeScanningDefaultSetupOptions
+        ] = NotSet
         self._code_scanning_delegated_alert_dismissal: Attribute[str] = NotSet
+        self._code_scanning_options: Attribute[CodeSecurityConfigurationCodeScanningOptions] = NotSet
         self._created_at: Attribute[datetime] = NotSet
         self._dependabot_alerts: Attribute[str] = NotSet
         self._dependabot_delegated_alert_dismissal: Attribute[str] = NotSet
@@ -92,8 +98,16 @@ class CodeSecurityConfig(NonCompletableGithubObject):
         return self._code_scanning_default_setup.value
 
     @property
+    def code_scanning_default_setup_options(self) -> CodeSecurityConfigurationCodeScanningDefaultSetupOptions:
+        return self._code_scanning_default_setup_options.value
+
+    @property
     def code_scanning_delegated_alert_dismissal(self) -> str:
         return self._code_scanning_delegated_alert_dismissal.value
+
+    @property
+    def code_scanning_options(self) -> CodeSecurityConfigurationCodeScanningOptions:
+        return self._code_scanning_options.value
 
     @property
     def created_at(self) -> datetime:
@@ -208,9 +222,19 @@ class CodeSecurityConfig(NonCompletableGithubObject):
             self._advanced_security = self._makeStringAttribute(attributes["advanced_security"])
         if "code_scanning_default_setup" in attributes:  # pragma no branch
             self._code_scanning_default_setup = self._makeStringAttribute(attributes["code_scanning_default_setup"])
+        if "code_scanning_default_setup_options" in attributes:  # pragma no branch
+            self._code_scanning_default_setup_options = self._makeClassAttribute(
+                github.CodeSecurityConfigurationCodeScanningDefaultSetupOptions.CodeSecurityConfigurationCodeScanningDefaultSetupOptions,
+                attributes["code_scanning_default_setup_options"],
+            )
         if "code_scanning_delegated_alert_dismissal" in attributes:  # pragma no branch
             self._code_scanning_delegated_alert_dismissal = self._makeStringAttribute(
                 attributes["code_scanning_delegated_alert_dismissal"]
+            )
+        if "code_scanning_options" in attributes:  # pragma no branch
+            self._code_scanning_options = self._makeClassAttribute(
+                github.CodeSecurityConfigurationCodeScanningOptions.CodeSecurityConfigurationCodeScanningOptions,
+                attributes["code_scanning_options"],
             )
         if "created_at" in attributes:  # pragma no branch
             assert attributes["created_at"] is None or isinstance(attributes["created_at"], str), attributes[
