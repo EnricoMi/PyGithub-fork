@@ -154,6 +154,7 @@ class PullRequest(CompletableGithubObject):
     - /components/schemas/pull-request
     - /components/schemas/pull-request-minimal
     - /components/schemas/pull-request-simple
+    - /components/schemas/pull-requests-on-alerts
 
     """
 
