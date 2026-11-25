@@ -40,6 +40,8 @@ class CodeScanAlert(Framework.TestCase):
 
     def testAttributes(self):
         alert = self.repo.get_codescan_alert(1)
+        self.assertEqual(alert.assignees[0].login, "")
+        self.assertEqual(alert.linked_pull_requests[0].number, "")
         self.assertEqual(alert.number, 1)
         self.assertEqual(alert.created_at, datetime(2025, 8, 22, 23, 38, 23, tzinfo=timezone.utc))
         self.assertEqual(alert.updated_at, datetime(2025, 8, 25, 16, 3, 10, tzinfo=timezone.utc))

@@ -40,6 +40,7 @@ import github.CodeScanTool
 import github.GithubObject
 import github.NamedUser
 import github.Organization
+import github.PullRequest
 from github.GithubObject import Attribute, NonCompletableGithubObject, NotSet
 from github.PaginatedList import PaginatedList
 
@@ -49,6 +50,7 @@ if TYPE_CHECKING:
     from github.CodeScanTool import CodeScanTool
     from github.NamedUser import NamedUser
     from github.Organization import Organization
+    from github.PullRequest import PullRequest
 
 
 class CodeScanAlert(NonCompletableGithubObject):
@@ -76,6 +78,7 @@ class CodeScanAlert(NonCompletableGithubObject):
         self._fixed_at: Attribute[datetime | None] = NotSet
         self._html_url: Attribute[str] = NotSet
         self._instances_url: Attribute[str] = NotSet
+        self._linked_pull_requests: Attribute[list[PullRequest]] = NotSet
         self._most_recent_instance: Attribute[CodeScanAlertInstance] = NotSet
         self._number: Attribute[int] = NotSet
         self._rule: Attribute[CodeScanRule] = NotSet
@@ -126,6 +129,10 @@ class CodeScanAlert(NonCompletableGithubObject):
     @property
     def instances_url(self) -> str:
         return self._instances_url.value
+
+    @property
+    def linked_pull_requests(self) -> list[PullRequest]:
+        return self._linked_pull_requests.value
 
     @property
     def most_recent_instance(self) -> CodeScanAlertInstance:
@@ -193,6 +200,10 @@ class CodeScanAlert(NonCompletableGithubObject):
             self._html_url = self._makeStringAttribute(attributes["html_url"])
         if "instances_url" in attributes:  # pragma no branch
             self._instances_url = self._makeStringAttribute(attributes["instances_url"])
+        if "linked_pull_requests" in attributes:  # pragma no branch
+            self._linked_pull_requests = self._makeListOfClassesAttribute(
+                github.PullRequest.PullRequest, attributes["linked_pull_requests"]
+            )
         if "most_recent_instance" in attributes:  # pragma no branch
             self._most_recent_instance = self._makeClassAttribute(
                 github.CodeScanAlertInstance.CodeScanAlertInstance,
