@@ -58,6 +58,7 @@ class DependabotAlert(NonCompletableGithubObject):
     """
 
     def _initAttributes(self) -> None:
+        self._assignees: Attribute[list[NamedUser]] = NotSet
         self._auto_dismissed_at: Attribute[datetime] = NotSet
         self._created_at: Attribute[datetime] = NotSet
         self._dependency: Attribute[DependabotAlertDependency] = NotSet
@@ -76,6 +77,10 @@ class DependabotAlert(NonCompletableGithubObject):
 
     def __repr__(self) -> str:
         return self.get__repr__({"number": self.number, "ghsa_id": self.security_advisory.ghsa_id})
+
+    @property
+    def assignees(self) -> list[NamedUser]:
+        return self._assignees.value
 
     @property
     def auto_dismissed_at(self) -> datetime:
@@ -138,6 +143,8 @@ class DependabotAlert(NonCompletableGithubObject):
         return self._url.value
 
     def _useAttributes(self, attributes: dict[str, Any]) -> None:
+        if "assignees" in attributes:  # pragma no branch
+            self._assignees = self._makeListOfClassesAttribute(github.NamedUser.NamedUser, attributes["assignees"])
         if "auto_dismissed_at" in attributes:  # pragma no branch
             self._auto_dismissed_at = self._makeDatetimeAttribute(attributes["auto_dismissed_at"])
         if "created_at" in attributes:

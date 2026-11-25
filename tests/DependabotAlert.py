@@ -43,6 +43,7 @@ class DependabotAlert(Framework.TestCase):
 
     def testAttributes(self):
         alert = self.repo.get_dependabot_alert(1)
+        self.assertEqual(alert.assignees[0].login, "")
         self.assertIsNone(alert.auto_dismissed_at)
         self.assertEqual(alert.created_at, datetime(2024, 1, 20, 17, 12, 38, tzinfo=timezone.utc))
         self.assertEqual(alert.dependency.package.name, "jinja2")
